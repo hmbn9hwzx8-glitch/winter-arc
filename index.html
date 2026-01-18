@@ -89,40 +89,42 @@ document.addEventListener('touchend', function (event) {
 }, false);
 </script>
 
-  <script>
-const state = {};
+<script>
+const state = JSON.parse(localStorage.getItem("dailyState") || "{}");
 
-function setVal(task, value){
-  state[task] = value;
+function toggleTask(task){
+  const card = document.querySelector(`[data-task="${task}"]`);
+  const btn = card.querySelector(".check-btn");
 
-  const container = document.querySelector(`[data-task="${task}"]`);
-  const buttons = container.querySelectorAll("button");
-
-  buttons.forEach(btn => btn.classList.remove("active"));
-
-  if(value === 1){
-    buttons[0].classList.add("active"); // yes
+  if(state[task] === 1){
+    state[task] = 0;
+    btn.classList.remove("active");
   } else {
-    buttons[1].classList.add("active"); // no
+    state[task] = 1;
+    btn.classList.add("active");
   }
 
   localStorage.setItem("dailyState", JSON.stringify(state));
 }
 
-// Sayfa açılınca eski veriyi yükle
 window.onload = () => {
-  const saved = localStorage.getItem("dailyState");
-  if(saved){
-    Object.assign(state, JSON.parse(saved));
-    for(const key in state){
-      setVal(key, state[key]);
+  for(const task in state){
+    if(state[task] === 1){
+      const card = document.querySelector(`[data-task="${task}"]`);
+      if(card){
+        card.querySelector(".check-btn").classList.add("active");
+      }
     }
   }
 };
 </script>
 
+
+</script>
+
 </body>
 </html>
+
 
 
 
