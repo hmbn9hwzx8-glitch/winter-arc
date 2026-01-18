@@ -130,9 +130,38 @@ window.onload = () => {
   }
 };
 </script>
+<script>
+const state = JSON.parse(localStorage.getItem("dailyState") || "{}");
+function toggleTask(task){
+  const card = document.querySelector(`[data-task="${task}"]`);
+  const btn = card.querySelector(".check-btn");
+
+  if(state[task] === 1){
+    state[task] = 0;
+    btn.classList.remove("active");
+  } else {
+    state[task] = 1;
+    btn.classList.add("active");
+  }
+
+  localStorage.setItem("dailyState", JSON.stringify(state));
+}
+
+window.onload = () => {
+  for(const task in state){
+    if(state[task] === 1){
+      const card = document.querySelector(`[data-task="${task}"]`);
+      if(card){
+        card.querySelector(".check-btn").classList.add("active");
+      }
+    }
+  }
+};
+</script>
 
 </body>
 </html>
+
 
 
 
