@@ -229,7 +229,10 @@ function lockTask(task, btn){
   locks[task] = true;
   btn.classList.remove("active");
   btn.classList.add("locked");
-  localStorage.setItem("dailyLocks", JSON.stringify(locks));}
+
+  localStorage.setItem("dailyLocks", JSON.stringify(locks));
+}
+
 window.onload = () => {
   for(const task in state){
     if(state[task] === 1){
@@ -255,6 +258,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
