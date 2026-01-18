@@ -109,6 +109,31 @@ h1,h2{margin-top:0}
   font-size:16px;   /* yarı boyut */
   margin:0;
 }
+/* Sayaç yazısı */
+.timer-badge{
+  position:absolute;
+  bottom:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:11px;
+  color:#0a1a3a; /* lacivert */
+  font-weight:600;
+}
+
+/* Aktif durum (normal) */
+.check-btn.active{
+  background:#22c55e;
+  border-color:#22c55e;
+  color:#fff;
+}
+
+/* Kilitli durum (renkler ters) */
+.check-btn.locked{
+  background:#fff;
+  border-color:#22c55e;
+  color:#22c55e;
+  cursor:not-allowed;
+}
 </style>
 </head>
 <body>
@@ -225,6 +250,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
