@@ -157,11 +157,13 @@ h1,h2{margin-top:0}
 
 <div class="card">
 <h2>Günlük Check-in</h2>
-<div id="empty-state">
+
+<div id="emptyState" class="empty-state">
   <div class="empty-icon">☁️</div>
-  <p class="empty-title">Henüz eklenen bir hedef yok</p>
-  <button class="empty-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</button>
+  <p class="empty-text">Henüz eklenen bir hedef yok</p>
+  <div class="create-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div>
 </div>
+
 
 <div class="task-card" data-task="job">
   <div class="task-text">Ana işi yaptın mı?</div>
@@ -288,11 +290,24 @@ window.onload = () => {
       }
     }
   }
+// Boş hedef kontrolü
+checkEmptyState();
 };
+function checkEmptyState(){
+  const emptyBox = document.getElementById("emptyState");
+  const hasAnyTask = Object.keys(state).length > 0;
+
+  if(hasAnyTask){
+    emptyBox.style.display = "none";
+  } else {
+    emptyBox.style.display = "block";
+  }
+}
 </script>
 
 </body>
 </html>
+
 
 
 
