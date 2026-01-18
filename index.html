@@ -156,42 +156,15 @@ h1,h2{margin-top:0}
 
 
 <div class="card">
-<h2>Günlük Check-in</h2>
+  <h2>Günlük Check-in</h2>
 
-<div id="emptyState" class="empty-state">
-  <div class="empty-icon">☁️</div>
-  <p class="empty-text">Henüz eklenen bir hedef yok</p>
-  <div class="create-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div>
-</div>
+  <div id="emptyState" class="empty-state">
+    <div class="empty-icon">☁️</div>
+    <p class="empty-text">Henüz eklenen bir hedef yok</p>
+    <div class="create-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div>
+  </div>
 
-
-<div class="task-card" data-task="job">
-  <div class="task-text">Ana işi yaptın mı?</div>
-  <button class="check-btn" onclick="toggleTask('job')">✓</button>
-</div>
-
-
-
-<div class="task-card" data-task="escape">
-  <div class="task-text">Bilerek kaçtın mı?</div>
-  <button class="check-btn" onclick="toggleTask('escape')">✓</button>
-</div>
-
-
-
-<div class="task-card" data-task="phone">
-  <div class="task-text">Telefon kaçağı (&gt;1s)?</div>
-  <button class="check-btn" onclick="toggleTask('phone')">✓</button>
-</div>
-
-
-<div class="task-card" data-task="lie">
-  <div class="task-text">Kendine yalan söyledin mi?</div>
-  <button class="check-btn" onclick="toggleTask('lie')">✓</button>
-</div>
-
-
-
+  <div id="goalsContainer"></div>
 </div>
 
 <script>
@@ -307,6 +280,7 @@ function checkEmptyState(){
 
 </body>
 </html>
+
 
 
 
