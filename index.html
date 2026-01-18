@@ -24,7 +24,14 @@ html, body {
   touch-action: manipulation;
 }
 
-body{font-family:-apple-system,system-ui;background:#111;color:#eee;padding:16px}
+body{
+  font-family:-apple-system,system-ui;
+  background:#111;
+  color:#eee;
+  padding:16px;
+  padding-top:70px; /* üst bar için boşluk */
+}
+
 h1,h2{margin-top:0}
 /*button{width:100%;padding:12px;margin:6px 0;font-size:16px;border:none;border-radius:6px}*/
 .yes{background:#1e7f4f;color:#fff}
@@ -85,11 +92,31 @@ h1,h2{margin-top:0}
   border-color:#22c55e;
   color:#fff;
 }
+.top-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:52px;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+
+.top-bar h1{
+  font-size:16px;   /* yarı boyut */
+  margin:0;
+}
 </style>
 </head>
 <body>
 
-<h1>Winter Arc</h1>
+<div class="top-bar">
+  <h1>Winter Arc</h1>
+</div>
+
 
 <div class="card">
 <h2>Günlük Check-in</h2>
@@ -198,6 +225,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
