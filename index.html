@@ -44,32 +44,31 @@ button{width:100%;padding:12px;margin:6px 0;font-size:16px;border:none;border-ra
 <div class="card">
 <h2>Günlük Check-in</h2>
 
-<div data-task="job">
-<p>Ana işi yaptın mı?</p>
-<button class="yes" onclick="setVal('job',1)">✓</button>
-<button class="no" onclick="setVal('job',0)">✗</button>
+<div class="task-card" data-task="job">
+  <div class="task-text">Ana işi yaptın mı?</div>
+  <button class="check-btn" onclick="toggleTask('job')">✓</button>
 </div>
 
 
-<div data-task="escape">
-<p>Bilerek kaçtın mı?</p>
-<button class="yes" onclick="setVal('escape',1)">✓</button>
-<button class="no" onclick="setVal('escape',0)">✗</button>
+
+<div class="task-card" data-task="escape">
+  <div class="task-text">Bilerek kaçtın mı?</div>
+  <button class="check-btn" onclick="toggleTask('escape')">✓</button>
 </div>
 
 
-<div data-task="phone">
-<p>Telefon kaçağı (>1s)?</p>
-<button class="yes" onclick="setVal('phone',1)">✓</button>
-<button class="no" onclick="setVal('phone',0)">✗</button>
+
+<div class="task-card" data-task="phone">
+  <div class="task-text">Telefon kaçağı (&gt;1s)?</div>
+  <button class="check-btn" onclick="toggleTask('phone')">✓</button>
 </div>
 
 
-<div data-task="lie">
-<p>Kendine yalan söyledin mi?</p>
-<button class="yes" onclick="setVal('lie',1)">✓</button>
-<button class="no" onclick="setVal('lie',0)">✗</button>
+<div class="task-card" data-task="lie">
+  <div class="task-text">Kendine yalan söyledin mi?</div>
+  <button class="check-btn" onclick="toggleTask('lie')">✓</button>
 </div>
+
 
 
 </div>
@@ -124,6 +123,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
