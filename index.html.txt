@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winter Arc</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+body{font-family:-apple-system,system-ui;background:#111;color:#eee;padding:16px}
+h1,h2{margin-top:0}
+button{width:100%;padding:12px;margin:6px 0;font-size:16px;border:none;border-radius:6px}
+.yes{background:#1e7f4f;color:#fff}
+.no{background:#7f1e1e;color:#fff}
+.card{border:1px solid #333;padding:12px;border-radius:8px;margin-top:14px}
+</style>
+</head>
+<body>
+
+<h1>Winter Arc</h1>
+
+<div class="card">
+<h2>Günlük Check-in</h2>
+
+<p>Ana işi yaptın mı?</p>
+<button class="yes">Evet</button>
+<button class="no">Hayır</button>
+
+<p>Bilerek kaçtın mı?</p>
+<button class="yes">Evet</button>
+<button class="no">Hayır</button>
+
+<p>Telefon kaçağı (>1s)?</p>
+<button class="yes">Evet</button>
+<button class="no">Hayır</button>
+
+<p>Kendine yalan söyledin mi?</p>
+<button class="yes">Evet</button>
+<button class="no">Hayır</button>
+
+</div>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>
