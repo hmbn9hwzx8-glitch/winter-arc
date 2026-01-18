@@ -134,6 +134,8 @@ h1,h2{margin-top:0}
 .empty-text{
   font-size:18px;
   margin-bottom:20px;
+  color:#fff;          /* beyaz renk */
+  font-weight:600;    /* biraz daha kalın */
 }
 
 .create-btn{
@@ -155,14 +157,12 @@ h1,h2{margin-top:0}
 </div>
 
 
-<div class="card">
-  <h2>Günlük Check-in</h2>
 
   <div id="emptyState" class="empty-state">
     <div class="empty-icon">☁️</div>
     <p class="empty-text">Henüz eklenen bir hedef yok</p>
     <div class="create-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div>
-  </div>
+ 
 
   <div id="goalsContainer"></div>
 </div>
@@ -280,6 +280,7 @@ function checkEmptyState(){
 
 </body>
 </html>
+
 
 
 
