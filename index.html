@@ -191,18 +191,6 @@ document.addEventListener('touchend', function (event) {
 }, false);
 </script>
 <script>
-window.onload = () => {
-  for(const task in state){
-    if(state[task] === 1){
-      const card = document.querySelector(`[data-task="${task}"]`);
-      if(card){
-        card.querySelector(".check-btn").classList.add("active");
-      }
-    }
-  }
-};
-</script>
-<script>
 const state = JSON.parse(localStorage.getItem("dailyState") || "{}");
 const locks = JSON.parse(localStorage.getItem("dailyLocks") || "{}");
 const timers = {};
@@ -288,6 +276,7 @@ window.onload = () => {
 
 </body>
 </html>
+
 
 
 
