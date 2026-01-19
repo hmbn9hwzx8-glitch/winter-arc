@@ -169,6 +169,55 @@ h1,h2{margin-top:0}
   cursor:pointer;
 }
 
+.panel-inner{
+  background:#0b0b0b;
+  border-radius:22px;
+  padding:18px;
+  margin:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.panel-handle{
+  width:36px;
+  height:5px;
+  background:#444;
+  border-radius:10px;
+  margin:0 auto 12px auto;
+}
+
+#goalInput{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  margin-top:12px;
+  font-size:16px;
+  outline:none;
+}
+
+.primary-btn{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:#5b5fe9;
+  color:white;
+  font-size:16px;
+  font-weight:600;
+}
+
+.cancel-btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:#222;
+  color:#aaa;
+  font-size:15px;
+}
+
 </style>
 </head>
 <body>
@@ -291,21 +340,25 @@ checkEmptyState();
 };
 function checkEmptyState(){
   const emptyBox = document.getElementById("emptyState");
-  const hasAnyTask = Object.keys(state).length > 0;
+  const container = document.getElementById("goalsContainer");
 
-  if(hasAnyTask){
+  if(container.children.length > 0){
     emptyBox.style.display = "none";
   } else {
     emptyBox.style.display = "block";
   }
 }
+
 function openCreatePanel(){
   document.getElementById("createPanel").style.bottom = "0";
+  document.body.style.overflow = "hidden";
 }
 
 function closeCreatePanel(){
   document.getElementById("createPanel").style.bottom = "-100%";
+  document.body.style.overflow = "auto";
 }
+
 function addGoal(){
   const input = document.getElementById("goalInput");
   const title = input.value.trim();
@@ -317,10 +370,11 @@ function addGoal(){
   div.className = "task-card";
   div.innerHTML = `
     <div class="task-text">${title}</div>
-    <div class="check-btn">✓</div>
+    <div class="check-btn" onclick="toggleTask('${title}')">✓</div>
   `;
+  div.setAttribute("data-task", title);
 
-  container.appendChild(div);
+  container.prepend(div);
 
   input.value = "";
   closeCreatePanel();
@@ -333,7 +387,7 @@ position:fixed;
 left:0;
 right:0;
 bottom:-100%;
-height:60%;
+height:85%;
 background:#111;
 border-top-left-radius:20px;
 border-top-right-radius:20px;
@@ -342,44 +396,25 @@ z-index:2000;
 padding:16px;
 ">
 
+<div class="panel-inner">
+
+  <div class="panel-handle"></div>
+
   <h3>Yeni Hedef</h3>
 
-  <input id="goalInput" placeholder="Hedef adı" style="
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  margin-top:12px;
-  ">
+  <input id="goalInput" placeholder="Hedef adı">
 
-  <button onclick="addGoal()" style="
-  margin-top:16px;
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  background:#5b5fe9;
-  color:white;
-  font-size:16px;
-  ">
-  Kaydet
-  </button>
+  <button class="primary-btn" onclick="addGoal()">Kaydet</button>
+  <button class="cancel-btn" onclick="closeCreatePanel()">İptal</button>
 
-  <button onclick="closeCreatePanel()" style="
-  margin-top:10px;
-  width:100%;
-  padding:10px;
-  border:none;
-  background:none;
-  color:#888;
-  ">
-  İptal
-  </button>
+</div>
+
 
 </div>
 
 </body>
 </html>
+
 
 
 
