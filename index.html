@@ -151,6 +151,24 @@ h1,h2{margin-top:0}
   font-weight:600;
 }
 
+.add-btn{
+  position:fixed;
+  top:6px;
+  right:12px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#5b5fe9;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+  z-index:1100;
+  cursor:pointer;
+}
+
 </style>
 </head>
 <body>
@@ -158,6 +176,8 @@ h1,h2{margin-top:0}
 <div class="top-bar">
   <h1>Winter Arc</h1>
 </div>
+
+  <div class="add-btn" onclick="openCreatePanel()">+</div>
 
 
 
@@ -279,10 +299,88 @@ function checkEmptyState(){
     emptyBox.style.display = "block";
   }
 }
+function openCreatePanel(){
+  document.getElementById("createPanel").style.bottom = "0";
+}
+
+function closeCreatePanel(){
+  document.getElementById("createPanel").style.bottom = "-100%";
+}
+function addGoal(){
+  const input = document.getElementById("goalInput");
+  const title = input.value.trim();
+  if(!title) return;
+
+  const container = document.getElementById("goalsContainer");
+
+  const div = document.createElement("div");
+  div.className = "task-card";
+  div.innerHTML = `
+    <div class="task-text">${title}</div>
+    <div class="check-btn">✓</div>
+  `;
+
+  container.appendChild(div);
+
+  input.value = "";
+  closeCreatePanel();
+  checkEmptyState();
+}
+
 </script>
+<div id="createPanel" style="
+position:fixed;
+left:0;
+right:0;
+bottom:-100%;
+height:60%;
+background:#111;
+border-top-left-radius:20px;
+border-top-right-radius:20px;
+transition:0.3s;
+z-index:2000;
+padding:16px;
+">
+
+  <h3>Yeni Hedef</h3>
+
+  <input id="goalInput" placeholder="Hedef adı" style="
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  margin-top:12px;
+  ">
+
+  <button onclick="addGoal()" style="
+  margin-top:16px;
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  background:#5b5fe9;
+  color:white;
+  font-size:16px;
+  ">
+  Kaydet
+  </button>
+
+  <button onclick="closeCreatePanel()" style="
+  margin-top:10px;
+  width:100%;
+  padding:10px;
+  border:none;
+  background:none;
+  color:#888;
+  ">
+  İptal
+  </button>
+
+</div>
 
 </body>
 </html>
+
 
 
 
