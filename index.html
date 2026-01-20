@@ -89,7 +89,6 @@ h1,h2{margin-top:0}
   border-radius:2px;
 }
 
-}
 /* Sayaç yazısı */
 .timer-badge{
   position:absolute;
@@ -101,20 +100,6 @@ h1,h2{margin-top:0}
   font-weight:600;
 }
 
-/* Aktif durum (normal) */
-.check-btn.active{
-  background:#22c55e;
-  border-color:#22c55e;
-  color:#fff;
-}
-
-/* Kilitli durum (renkler ters) */
-.check-btn.locked{
-  background:#fff;
-  border-color:#22c55e;
-  color:#22c55e;
-  cursor:not-allowed;
-}
 
 /* Hedef yok ekranı */
 
@@ -254,26 +239,10 @@ function toggleTask(task){
 }
   
 window.onload = () => {
-  for(const task in state){
-    if(state[task] === 1){
-      const card = document.querySelector(`[data-task="${task}"]`);
-      if(card){
-        card.querySelector(".check-btn").classList.add("active");
-      }
-    }
-  }
+ checkEmptyState();
+};
 
-  for(const task in locks){
-    if(locks[task]){
-      const card = document.querySelector(`[data-task="${task}"]`);
-      if(card){
-        const btn = card.querySelector(".check-btn");
-        btn.classList.remove("active");
-        btn.classList.add("locked");
-      }
-    }
-  }
-// Boş hedef kontrolü
+  // Boş hedef kontrolü
 checkEmptyState();
 };
 function checkEmptyState(){
@@ -355,6 +324,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
