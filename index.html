@@ -43,7 +43,7 @@ h1,h2{margin-top:0}
 }
 
 .task-card{
-  background:#fff;
+  background:#c9b7e2;   /* pudra mor */
   color:#111;
   border-radius:18px;
   padding:14px 16px;
@@ -63,17 +63,17 @@ h1,h2{margin-top:0}
   width:42px;
   height:42px;
   border-radius:50%;
-  border:2px solid #ccc;
-  background:#fff;
-  color:#aaa;
-  font-size:22px;
+  border:none;              /* dış çizgi yok */
+  background:#fff;          /* beyaz */
+  color:#c9b7e2;            /* artı rengi = kart rengi */
+  font-size:26px;
   font-weight:bold;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  position: relative;
 }
+
 
 .top-bar{
   position:fixed;
@@ -254,66 +254,10 @@ document.addEventListener('touchend', function (event) {
 }, false);
 </script>
 <script>
-const state = JSON.parse(localStorage.getItem("dailyState") || "{}");
-const locks = JSON.parse(localStorage.getItem("dailyLocks") || "{}");
-const timers = {};
-
 function toggleTask(task){
-  const card = document.querySelector(`[data-task="${task}"]`);
-  const btn = card.querySelector(".check-btn");
-
-  if(locks[task]) return;
-
-  if(state[task] === 1){
-    state[task] = 0;
-    btn.classList.remove("active");
-    removeTimer(task, btn);
-  } else {
-    state[task] = 1;
-    btn.classList.add("active");
-    startTimer(task, btn);
-  }
-
-  localStorage.setItem("dailyState", JSON.stringify(state));
+  
 }
-
-function startTimer(task, btn){
-  let time = 60;
-
-  const badge = document.createElement("div");
-  badge.className = "timer-badge";
-  badge.textContent = time;
-  btn.appendChild(badge);
-
-  timers[task] = setInterval(()=>{
-    time--;
-    badge.textContent = time;
-
-    if(time <= 0){
-      clearInterval(timers[task]);
-      badge.remove();
-      lockTask(task, btn);
-    }
-  },1000);
-}
-
-function removeTimer(task, btn){
-  if(timers[task]){
-    clearInterval(timers[task]);
-    timers[task] = null;
-  }
-  const badge = btn.querySelector(".timer-badge");
-  if(badge) badge.remove();
-}
-
-function lockTask(task, btn){
-  locks[task] = true;
-  btn.classList.remove("active");
-  btn.classList.add("locked");
-
-  localStorage.setItem("dailyLocks", JSON.stringify(locks));
-}
-
+  
 window.onload = () => {
   for(const task in state){
     if(state[task] === 1){
@@ -369,7 +313,7 @@ function addGoal(){
   div.className = "task-card";
   div.innerHTML = `
     <div class="task-text">${title}</div>
-    <div class="check-btn" onclick="toggleTask('${title}')">✓</div>
+    <div class="check-btn" onclick="toggleTask('${title}')">+</div>
   `;
   div.setAttribute("data-task", title);
 
@@ -413,6 +357,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
