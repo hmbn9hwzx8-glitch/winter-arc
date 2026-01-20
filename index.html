@@ -60,43 +60,33 @@ h1,h2{margin-top:0}
 }
 
 .check-btn{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:none;
-  background:#fff;
-  color:#c9b7e2;
-  font-size:26px;
-  font-weight:bold;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  line-height:1;
-  transform: translateY(-10px);   /* burayı istersen -4 / -6 yapabilirsin */
-
+  width:24px;
+  height:24px;
+  position:relative;
   cursor:pointer;
+  background:transparent;   /* daire yok */
 }
 
-
-.top-bar{
-  position:fixed;
-  top:0;
+.plus-h{
+  position:absolute;
+  top:50%;
   left:0;
   width:100%;
-  height:36px;
-  background:#000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
+  height:2px;
+  background:#c9b7e2;
+  transform: translateY(-50%);
+  border-radius:2px;
 }
 
-.top-bar h1{
-  font-size:16px;
-  margin:0;
-  transform: translateY(-6px);
+.plus-v{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:2px;
+  height:100%;
+  background:#c9b7e2;
+  transform: translateX(-50%);
+  border-radius:2px;
 }
 
 }
@@ -318,8 +308,11 @@ function addGoal(){
   div.className = "task-card";
   div.innerHTML = `
     <div class="task-text">${title}</div>
-    <div class="check-btn" onclick="toggleTask('${title}')">+</div>
-  `;
+    <div class="check-btn">
+  <span class="plus-h"></span>
+  <span class="plus-v"></span>
+</div>
+`;
   div.setAttribute("data-task", title);
 
   container.prepend(div);
@@ -362,6 +355,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
