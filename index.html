@@ -263,7 +263,40 @@ h1,h2{margin-top:0}
   right:12px;
   font-weight:300;
 }
-  
+
+.plus-icon{
+  position:relative;
+  width:22px;   /* toplam genişlik */
+  height:22px;  /* toplam yükseklik */
+  display:block;
+}
+
+.plus-icon::before,
+.plus-icon::after{
+  content:"";
+  position:absolute;
+  background:#c9b7e2; /* mor renk */
+  border-radius:2px;
+}
+
+/* yatay kol */
+.plus-icon::before{
+  width:22px;
+  height:3px;
+  top:50%;
+  left:0;
+  transform:translateY(-50%);
+}
+
+/* dikey kol */
+.plus-icon::after{
+  width:3px;
+  height:22px;
+  left:50%;
+  top:0;
+  transform:translateX(-50%);
+}
+
 </style>
 </head>
 <body>
@@ -278,9 +311,10 @@ h1,h2{margin-top:0}
 
   <div class="top-title">Winter Arc</div>
 
-  <div class="top-btn add-btn-top" onclick="openCreatePanel()">+</div>
-
+  <div class="top-btn add-btn-top" onclick="openCreatePanel()">
+  <span class="plus-icon"></span>
 </div>
+
 
 
   <div id="emptyState" class="empty-state">
@@ -410,6 +444,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
