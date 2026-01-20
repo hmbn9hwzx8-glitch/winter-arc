@@ -256,13 +256,34 @@ document.addEventListener('touchend', function (event) {
 }, false);
 </script>
 <script>
+let goals = JSON.parse(localStorage.getItem("goals") || "[]");
+
 function toggleTask(task){
   
 }
   
 window.onload = () => {
- checkEmptyState();
+  renderGoals();
+  checkEmptyState();
 };
+
+function renderGoals(){
+  const container = document.getElementById("goalsContainer");
+  container.innerHTML = "";
+
+  goals.forEach(title => {
+    const div = document.createElement("div");
+    div.className = "task-card";
+    div.innerHTML = `
+      <div class="task-text">${title}</div>
+      <div class="check-btn">
+        <span class="plus-h"></span>
+        <span class="plus-v"></span>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
 
 function checkEmptyState(){
   const emptyBox = document.getElementById("emptyState");
@@ -290,24 +311,15 @@ function addGoal(){
   const title = input.value.trim();
   if(!title) return;
 
-  const container = document.getElementById("goalsContainer");
+  goals.unshift(title); // en üste ekle
 
-  const div = document.createElement("div");
-  div.className = "task-card";
-  div.innerHTML = `
-    <div class="task-text">${title}</div>
-    <div class="check-btn">
-  <span class="plus-h"></span>
-  <span class="plus-v"></span>
-</div>
-`;
-  div.setAttribute("data-task", title);
+  localStorage.setItem("goals", JSON.stringify(goals));
 
-  container.prepend(div);
+  renderGoals();
+  checkEmptyState();
 
   input.value = "";
   closeCreatePanel();
-  checkEmptyState();
 }
 
 </script>
@@ -343,6 +355,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
