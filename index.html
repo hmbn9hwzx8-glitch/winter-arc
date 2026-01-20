@@ -63,17 +63,20 @@ h1,h2{margin-top:0}
   width:42px;
   height:42px;
   border-radius:50%;
-  border:none;              /* dış çizgi yok */
-  background:#fff;          /* beyaz */
-  color:#c9b7e2;            /* artı rengi = kart rengi */
+  border:none;
+  background:#fff;
+  color:#c9b7e2;
   font-size:26px;
   font-weight:bold;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  line-height:1;
+  transform: translateY(-6px);   /* burayı istersen -4 / -6 yapabilirsin */
+
   cursor:pointer;
-  line-height:1;          /* <-- önemli */
-  transform: translateY(-6px);  /* ← bunu ayarlayacağız */
 }
 
 
@@ -359,6 +362,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
