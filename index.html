@@ -29,7 +29,7 @@ body{
   background:#000;
   color:#eee;
   padding:16px;
-  padding-top:70px; /* üst bar için boşluk */
+  padding-top: calc(48px + env(safe-area-inset-top) + 10px);
 }
 
 h1,h2{margin-top:0}
@@ -203,34 +203,15 @@ h1,h2{margin-top:0}
 
 .top-bar{
   position:fixed;
-  top:0;
+  top: env(safe-area-inset-top);
   left:0;
   width:100%;
-  height:44px;
-  background:#000;
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  padding-bottom:6px;
-  z-index:1000;
-}
-
-.top-bar h1{
-  margin:0;
-  font-size:16px;
-}
-
-.top-bar{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:54px;
+  height:48px;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:0 12px;
-  background:rgba(0,0,0,0);
+  padding:0 16px;
+  box-sizing:border-box;
   z-index:3000;
 }
 
@@ -241,6 +222,7 @@ h1,h2{margin-top:0}
   position:absolute;
   left:50%;
   transform:translateX(-50%);
+  pointer-events:none;
 }
 
 .top-btn{
@@ -256,6 +238,9 @@ h1,h2{margin-top:0}
 }
 
 .hamburger{
+  position:absolute;
+  left:16px;
+  display:flex;
   flex-direction:column;
   gap:4px;
 }
@@ -268,12 +253,9 @@ h1,h2{margin-top:0}
   display:block;
 }
 
-.add-btn-top{
-  font-weight:300;
-}
 .hamburger{
   position:absolute;
-  left:12px;
+  left:16px;
 }
 
 .add-btn-top{
@@ -428,6 +410,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
