@@ -306,6 +306,23 @@ h1,h2{margin-top:0}
   transform:translateX(-50%);
 }
 
+/* Empty state animasyon başlangıç durumu */
+.empty-state{
+  opacity:0;
+  filter: blur(6px);
+  transform: translate(-50%, calc(-50% - 20px));
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+/* Görünür olduğundaki hali */
+.empty-state.show{
+  opacity:1;
+  filter: blur(0);
+  transform: translate(-50%, calc(-50% - 30px)); /* biraz yukarıda dursun */
+}
 
 </style>
 </head>
@@ -385,11 +402,19 @@ function checkEmptyState(){
   const container = document.getElementById("goalsContainer");
 
   if(container.children.length > 0){
-    emptyBox.style.display = "none";
-    document.body.style.overflow = "auto";   // scroll açık
+    emptyBox.classList.remove("show");
+    setTimeout(() => {
+      emptyBox.style.display = "none";
+    }, 200);
+    document.body.style.overflow = "auto";
   } else {
     emptyBox.style.display = "flex";
-    document.body.style.overflow = "hidden"; // scroll kapalı
+    document.body.style.overflow = "hidden";
+
+    // küçük gecikme → animasyon için
+    setTimeout(() => {
+      emptyBox.classList.add("show");
+    }, 100);
   }
 }
 
@@ -456,6 +481,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
