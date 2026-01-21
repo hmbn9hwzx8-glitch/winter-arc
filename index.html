@@ -222,6 +222,7 @@ h1,h2{margin-top:0}
   padding:0 16px;
   box-sizing:border-box;
   z-index:3000;
+
 }
 
 .top-title{
@@ -324,6 +325,68 @@ h1,h2{margin-top:0}
   transform: translate(-50%, calc(-50% - 30px)); /* biraz yukarıda dursun */
 }
 
+#calendarWrapper{
+position:relative;
+margin-top:8px;
+padding:8px 0 14px;
+overflow:hidden;
+}
+
+
+#calendarTrack{
+display:flex;
+gap:22px;
+padding:0 50vw;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+-webkit-overflow-scrolling:touch;
+}
+
+
+.calendar-day{
+min-width:48px;
+text-align:center;
+color:#aaa;
+scroll-snap-align:center;
+transition:color .25s;
+}
+
+
+.calendar-day .day{
+font-size:12px;
+opacity:.7;
+}
+
+
+.calendar-day .date{
+font-size:16px;
+margin-top:2px;
+}
+
+
+.calendar-day.today{
+color:#c9b7e2;
+}
+
+
+.calendar-day.selected{
+color:#fff;
+}
+
+
+#calendarBubble{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:64px;
+height:72px;
+border-radius:32px;
+background:#c9b7e2;
+pointer-events:none;
+transition:transform .35s cubic-bezier(.25,.8,.25,1);
+z-index:-1;
+}
 </style>
 </head>
 <body>
@@ -344,6 +407,11 @@ h1,h2{margin-top:0}
 
 </div>
 
+<div id="calendarWrapper">
+  <div id="calendarTrack"></div>
+  <div id="calendarBubble"></div>
+</div>
+  
   <div id="emptyState" class="empty-state">
   <div class="empty-icon">📁</div>
   <p class="empty-text">Henüz eklenen bir hedef yok</p>
@@ -375,8 +443,9 @@ function toggleTask(task){
 }
   
 window.onload = () => {
-  renderGoals();
-  checkEmptyState();
+  buildCalendar();   // takvimi oluşturur
+  renderGoals();    // görevleri yükler
+  checkEmptyState(); // empty state + scroll kontrolü
 };
 
 function renderGoals(){
@@ -400,18 +469,25 @@ function renderGoals(){
 function checkEmptyState(){
   const emptyBox = document.getElementById("emptyState");
   const container = document.getElementById("goalsContainer");
+  const calendar = document.getElementById("calendarWrapper");
 
   if(container.children.length > 0){
+    // GÖREV VAR
+
     emptyBox.classList.remove("show");
     setTimeout(() => {
       emptyBox.style.display = "none";
     }, 200);
-    document.body.style.overflow = "auto";
-  } else {
-    emptyBox.style.display = "flex";
-    document.body.style.overflow = "hidden";
 
-    // küçük gecikme → animasyon için
+    calendar.style.display = "block";      // takvim görünsün
+    document.body.style.overflow = "auto"; // dikey scroll açık
+  } else {
+    // GÖREV YOK
+
+    emptyBox.style.display = "flex";
+    calendar.style.display = "block";      // takvim yine görünsün
+    document.body.style.overflow = "hidden"; // dikey scroll kapalı
+
     setTimeout(() => {
       emptyBox.classList.add("show");
     }, 100);
@@ -448,6 +524,88 @@ function openMenu(){
   alert("Menu panel later 😄");
 }
 
+const daysShort = ["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];
+let selectedIndex = 0;
+let todayIndex = 0;
+
+
+function buildCalendar(){
+const track = document.getElementById("calendarTrack");
+track.innerHTML = "";
+
+
+const today = new Date();
+const start = new Date();
+start.setDate(today.getDate() - 180);
+
+
+for(let i=0;i<365;i++){
+const d = new Date(start);
+d.setDate(start.getDate()+i);
+
+
+const div = document.createElement("div");
+div.className = "calendar-day";
+div.innerHTML = `
+<div class="day">${daysShort[d.getDay()]}</div>
+<div class="date">${d.getDate()}</div>
+`;
+
+
+if(d.toDateString() === today.toDateString()){
+div.classList.add("today","selected");
+selectedIndex = i;
+todayIndex = i;
+}
+
+
+div.onclick = ()=>selectDay(i);
+
+
+track.appendChild(div);
+}
+
+
+requestAnimationFrame(()=>{
+centerOnIndex(selectedIndex,false);
+});
+}
+
+function selectDay(index){
+const days = document.querySelectorAll(".calendar-day");
+
+
+days.forEach(d=>{
+d.classList.remove("selected");
+if(d.classList.contains("today")) d.style.color="#c9b7e2";
+});
+
+
+days[index].classList.add("selected");
+
+
+if(index !== todayIndex){
+days[todayIndex].style.color="#c9b7e2";
+}
+
+
+centerOnIndex(index,true);
+selectedIndex = index;
+}
+
+function centerOnIndex(index,animate){
+const track = document.getElementById("calendarTrack");
+const item = track.children[index];
+const bubble = document.getElementById("calendarBubble");
+
+
+const x = item.offsetLeft + item.offsetWidth/2 - track.clientWidth/2;
+track.scrollTo({left:x, behavior: animate?"smooth":"auto"});
+
+
+bubble.style.transform = `translateX(${item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2}px)`;
+}
+
 </script>
 <div id="createPanel" style="
 position:fixed;
@@ -481,6 +639,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
