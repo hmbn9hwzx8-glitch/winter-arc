@@ -121,6 +121,13 @@ h1,h2{margin-top:0}
   color:#bbb;
   width:100%;
   pointer-events:auto;
+
+  opacity:0;
+  filter: blur(6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    filter 0.35s ease;
 }
 
 .empty-icon{
@@ -305,17 +312,6 @@ h1,h2{margin-top:0}
   left:50%;
   top:0;
   transform:translateX(-50%);
-}
-
-/* Empty state animasyon başlangıç durumu */
-.empty-state{
-  opacity:0;
-  filter: blur(6px);
-  transform: translate(-50%, calc(-50% - 20px));
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease,
-    filter 0.35s ease;
 }
 
 /* Görünür olduğundaki hali */
@@ -639,6 +635,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
