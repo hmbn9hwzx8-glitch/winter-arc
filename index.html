@@ -386,7 +386,7 @@ z-index:-1;
     <span></span>
   </div>
 
-  <div class="top-title">Winter Arc</div>
+  <div class="top-title" id="titleBtn">Winter Arc</div>
 
   <div class="top-btn add-btn-top" onclick="openCreatePanel()">
   <span class="plus-icon"></span>
@@ -579,6 +579,25 @@ track.scrollTo({left:x, behavior: animate?"smooth":"auto"});
 bubble.style.transform = `translateX(${item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2}px)`;
 }
 
+function goToToday(){
+  const days = document.querySelectorAll(".calendar-day");
+
+  // bütün seçili günleri temizle
+  days.forEach(d => d.classList.remove("selected"));
+
+  // bugünün indexini tekrar seç
+  if(days[todayIndex]){
+    days[todayIndex].classList.add("selected");
+  }
+
+  selectedIndex = todayIndex;
+
+  // takvimi bugüne ortala
+  centerOnIndex(todayIndex, true);
+}
+
+document.getElementById("titleBtn").addEventListener("click", goToToday);
+
 </script>
 <div id="createPanel" style="
 position:fixed;
@@ -611,3 +630,4 @@ padding:16px;
 
 </body>
 </html>
+
