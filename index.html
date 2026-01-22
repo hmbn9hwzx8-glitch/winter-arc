@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Winter Arc</title>
 
 <link rel="manifest" href="manifest.json">
@@ -12,122 +12,602 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-html, body { overscroll-behavior:none; touch-action:manipulation; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-text-size-adjust:100%; }
-*{ touch-action:manipulation; }
-body{ font-family:-apple-system,system-ui; background:#000; color:#eee; padding:16px; padding-top: calc(60px + env(safe-area-inset-top)); }
+html, body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+}
 
-.task-card{background:#c9b7e2;color:#111;border-radius:18px;padding:14px 16px;margin:12px 0;display:flex;justify-content:space-between;align-items:center;box-shadow:0 6px 16px rgba(0,0,0,.25);}
-.task-card.done{opacity:.45;text-decoration:line-through}
-.task-text{font-size:15px;font-weight:500}
+* {
+  touch-action: manipulation;
+}
 
-.check-btn{width:36px;height:36px;border-radius:50%;background:#fff;position:relative;display:flex;align-items:center;justify-content:center}
-.plus-h,.plus-v{position:absolute;background:#c9b7e2;border-radius:2px}
-.plus-h{width:16px;height:3px}
-.plus-v{width:3px;height:16px}
+body{
+  font-family:-apple-system,system-ui;
+  background:#000;
+  color:#eee;
+  padding:16px;
+  padding-top: calc(48px + env(safe-area-inset-top) + 10px);
+}
 
-.top-bar{position:fixed;top:env(safe-area-inset-top);left:0;width:100%;height:60px;display:flex;align-items:center;justify-content:center;z-index:3000}
-.top-title{font-size:18px;font-weight:600;color:#fff;cursor:pointer;transition:transform .12s ease,opacity .12s ease}
-.top-title.pressed{transform:scale(.95);opacity:.6}
+h1,h2{margin-top:0}
+.yes{background:#1e7f4f;color:#fff}
+.no{background:#7f1e1e;color:#fff}
+.card{
+  border:1px solid #333;
+  padding:12px;
+  border-radius:8px;
+  margin-top:14px;
+}
 
-.top-btn{position:absolute;color:#c9b7e2;font-size:26px;cursor:pointer}
-.hamburger{left:16px}
-.add-btn-top{right:12px;font-weight:300}
+.task-card{
+  background:#c9b7e2;   /* pudra mor */
+  color:#111;
+  border-radius:18px;
+  padding:14px 16px;
+  margin:12px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 6px 16px rgba(0,0,0,0.25);
+}
 
-.hamburger span{display:block;width:20px;height:2px;background:#c9b7e2;border-radius:2px;margin:3px 0}
+.task-text{
+  font-size:15px;
+  font-weight:500;
+}
 
-.plus-icon{position:relative;width:16px;height:16px}
-.plus-icon::before,.plus-icon::after{content:"";position:absolute;background:#c9b7e2;border-radius:2px}
-.plus-icon::before{width:16px;height:2.5px;top:50%;transform:translateY(-50%)}
-.plus-icon::after{width:2.5px;height:16px;left:50%;transform:translateX(-50%)}
+.check-btn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#fff;
+  position:relative;
+  cursor:pointer;
 
-#statsBar{position:absolute;bottom:4px;display:flex;align-items:center;gap:10px;font-size:12px;color:#c9b7e2}
-#xpBar{width:80px;height:6px;background:#333;border-radius:10px;overflow:hidden}
-#xpFill{height:100%;width:0%;background:#c9b7e2;transition:.3s}
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-#calendarWrapper{margin-top:8px;padding:8px 0 14px;overflow:hidden;position:relative}
-#calendarTrack{display:flex;gap:22px;padding:0 50vw;overflow-x:auto;scroll-snap-type:x mandatory}
-.calendar-day{min-width:48px;text-align:center;color:#aaa;scroll-snap-align:center}
-.calendar-day.today{color:#c9b7e2}
-.calendar-day.selected{color:#fff}
+.plus-h{
+  position:absolute;
+  width:16px;              /* kısa kol */
+  height:3px;              /* kalınlık */
+  background:#c9b7e2;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  border-radius:2px;
+}
 
-#calendarBubble{position:absolute;top:0;width:64px;height:72px;border-radius:32px;background:#c9b7e2;pointer-events:none;transition:.35s;z-index:-1}
+.plus-v{
+  position:absolute;
+  width:3px;               /* kalınlık */
+  height:16px;             /* kısa kol */
+  background:#c9b7e2;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  border-radius:2px;
+}
 
-.empty-state{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#bbb;opacity:0;transition:.3s}
-.empty-state.show{opacity:1}
+/* Sayaç yazısı */
+.timer-badge{
+  position:absolute;
+  bottom:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:11px;
+  color:#0a1a3a; /* lacivert */
+  font-weight:600;
+}
 
-.panel-inner{background:#0b0b0b;border-radius:22px;padding:18px}
-.panel-handle{width:36px;height:5px;background:#444;border-radius:10px;margin:0 auto 12px}
+/* Hedef yok ekranı */
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:5000}
-.modal{background:#111;padding:20px;border-radius:18px;width:85%;max-width:320px;color:#fff;text-align:center}
+.empty-state{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, calc(-50% - 30px));
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#bbb;
+  width:100%;
+  pointer-events:auto;
+
+  opacity:0;
+  filter: blur(6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.empty-icon{
+  font-size:64px;
+  margin-bottom:16px;
+}
+
+.empty-text{
+  font-size:18px;
+  margin-bottom:20px;
+  color:#fff;          /* beyaz renk */
+  font-weight:600;    /* biraz daha kalın */
+}
+
+.create-btn{
+  display:inline-block;
+  padding:14px 26px;
+  background:#5b5fe9;
+  color:#fff;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:600;
+}
+
+.add-btn{
+  position:fixed;
+  top:10px;
+  right:14px;
+  width:auto;
+  height:auto;
+  background:transparent;      /* daire yok */
+  border-radius:0;
+  color:#c9b7e2;               /* pudra mor + */
+  font-size:28px;
+  font-weight:300;             /* ince kollar */
+  z-index:1100;
+  cursor:pointer;
+}
+
+.panel-inner{
+  background:#0b0b0b;
+  border-radius:22px;
+  padding:18px;
+  margin:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.panel-handle{
+  width:36px;
+  height:5px;
+  background:#444;
+  border-radius:10px;
+  margin:0 auto 12px auto;
+}
+
+#goalInput{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  margin-top:12px;
+  font-size:16px;
+  outline:none;
+}
+
+.primary-btn{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  background:#5b5fe9;
+  color:white;
+  font-size:16px;
+  font-weight:600;
+}
+
+.cancel-btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:#222;
+  color:#aaa;
+  font-size:15px;
+}
+
+.top-bar{
+  position:fixed;
+  top: env(safe-area-inset-top);
+  left:0;
+  width:100%;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+  box-sizing:border-box;
+  z-index:3000;
+
+}
+
+.top-title{
+  font-size:18px;
+  font-weight:600;
+  color:#fff;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+.top-btn{
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:#c9b7e2;
+  font-size:28px;
+  background:transparent;
+}
+
+.hamburger{
+  position:absolute;
+  left:16px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.hamburger span{
+  width:20px;
+  height:2px;
+  background:#c9b7e2;
+  border-radius:2px;
+  display:block;
+}
+
+.hamburger{
+  position:absolute;
+  left:16px;
+}
+
+.add-btn-top{
+  position:absolute;
+  right:12px;
+  font-weight:300;
+}
+
+.plus-icon{
+  position:relative;
+  width:16px;      /* biraz kısaldı */
+  height:16px;     /* biraz kısaldı */
+  display:block;
+}
+
+.plus-icon::before,
+.plus-icon::after{
+  content:"";
+  position:absolute;
+  background:#c9b7e2;
+  border-radius:2px;
+}
+
+/* yatay kol */
+.plus-icon::before{
+  width:16px;      /* biraz kısa */
+  height:2.5px;    /* biraz ince */
+  top:50%;
+  left:0;
+  transform:translateY(-50%);
+}
+
+/* dikey kol */
+.plus-icon::after{
+  width:2.5px;     /* biraz ince */
+  height:16px;     /* biraz kısa */
+  left:50%;
+  top:0;
+  transform:translateX(-50%);
+}
+
+/* Görünür olduğundaki hali */
+.empty-state.show{
+  opacity:1;
+  filter: blur(0);
+  transform: translate(-50%, calc(-50% - 30px)); /* biraz yukarıda dursun */
+}
+
+#calendarWrapper{
+position:relative;
+margin-top:8px;
+padding:8px 0 14px;
+overflow:hidden;
+}
+
+#calendarTrack{
+display:flex;
+gap:22px;
+padding:0 50vw;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+-webkit-overflow-scrolling:touch;
+}
+
+.calendar-day{
+min-width:48px;
+text-align:center;
+color:#aaa;
+scroll-snap-align:center;
+transition:color .25s;
+}
+
+.calendar-day .day{
+font-size:12px;
+opacity:.7;
+}
+
+.calendar-day .date{
+font-size:16px;
+margin-top:2px;
+}
+
+.calendar-day.today{
+color:#c9b7e2;
+}
+
+.calendar-day.selected{
+color:#fff;
+}
+
+#calendarBubble{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:64px;
+height:72px;
+border-radius:32px;
+background:#c9b7e2;
+pointer-events:none;
+transition:transform .35s cubic-bezier(.25,.8,.25,1);
+z-index:-1;
+}
 </style>
-
 </head>
 <body>
 
 <div class="top-bar">
-  <div class="top-btn hamburger" onclick="openMenu()"><span></span><span></span><span></span></div>
-  <div class="top-title" id="titleBtn">Winter Arc</div>
-  <div id="statsBar"><div id="streakText">🔥 0</div><div id="xpBar"><div id="xpFill"></div></div><div id="levelText">Lv 1</div></div>
-  <div class="top-btn add-btn-top" onclick="openCreatePanel()"><span class="plus-icon"></span></div>
+
+  <div class="top-btn hamburger" onclick="openMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="top-title">Winter Arc</div>
+
+  <div class="top-btn add-btn-top" onclick="openCreatePanel()">
+  <span class="plus-icon"></span>
 </div>
 
-<div id="calendarWrapper"><div id="calendarTrack"></div><div id="calendarBubble"></div></div>
+</div>
 
-<div id="emptyState" class="empty-state"><div style="font-size:64px">📁</div><p>Henüz eklenen bir hedef yok</p><div onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div></div>
+<div id="calendarWrapper">
+  <div id="calendarTrack"></div>
+  <div id="calendarBubble"></div>
+</div>
+  
+  <div id="emptyState" class="empty-state">
+  <div class="empty-icon">📁</div>
+  <p class="empty-text">Henüz eklenen bir hedef yok</p>
+  <div class="create-btn" onclick="openCreatePanel()">+ Yeni Hedef Oluştur</div>
+</div>
 
 <div id="goalsContainer"></div>
 
-<div id="createPanel" style="position:fixed;left:0;right:0;bottom:-100%;height:85%;background:#111;border-radius:20px;transition:.3s;padding:16px;z-index:2000">
-<div class="panel-inner"><div class="panel-handle"></div><h3>Yeni Hedef</h3><input id="goalInput" placeholder="Hedef adı" style="width:100%;padding:12px;border-radius:12px;border:none"><button onclick="addGoal()" style="margin-top:12px;width:100%">Kaydet</button><button onclick="closeCreatePanel()" style="margin-top:8px;width:100%">İptal</button></div></div>
-
-<!-- MODALS -->
-
-<div id="statsModal" class="modal-overlay" onclick="closeModals()"><div class="modal" onclick="event.stopPropagation()"><h3>İstatistikler</h3><div id="statsContent"></div><button onclick="closeModals()">Kapat</button></div></div>
-<div id="weeklyModal" class="modal-overlay" onclick="closeModals()"><div class="modal" onclick="event.stopPropagation()"><h3>Haftalık Özet</h3><div id="weeklyContent"></div><button onclick="closeModals()">Kapat</button></div></div>
-
 <script>
-let goals = JSON.parse(localStorage.getItem("goals_v2")||"[]");
-let selectedDate = localStorage.getItem("selectedDate")||todayStr();
-function todayStr(){return new Date().toISOString().slice(0,10)}
-function save(){localStorage.setItem("goals_v2",JSON.stringify(goals))}
-
-window.onload=()=>{buildCalendar();renderGoals();updateStats();checkEmptyState()}
-
-function addGoal(){const t=goalInput.value.trim();if(!t)return;goals.unshift({id:"g_"+Date.now(),title:t,createdAt:todayStr(),checks:{}});save();renderGoals();updateStats();checkEmptyState();closeCreatePanel();goalInput.value=""}
-function toggleGoal(id){const g=goals.find(x=>x.id===id);if(!g)return;if(g.checks[selectedDate])delete g.checks[selectedDate];else g.checks[selectedDate]=true;save();renderGoals();updateStats()}
-function renderGoals(){const c=goalsContainer;c.innerHTML="";goals.forEach(g=>{const done=!!g.checks[selectedDate];const d=document.createElement("div");d.className="task-card"+(done?" done":"");d.innerHTML=`<div class=\"task-text\">${g.title}</div><div class=\"check-btn\" onclick=\"toggleGoal('${g.id}')\"><span class=\"plus-h\"></span><span class=\"plus-v\"></span></div>`;c.appendChild(d);})}
-function checkEmptyState(){goals.length?emptyState.classList.remove("show"):emptyState.classList.add("show")}
-
-function calcStats(){let totalXP=0;const days={};goals.forEach(g=>{for(const d in g.checks){totalXP+=10;days[d]=(days[d]||0)+1}});let streak=0;let cur=new Date();while(true){const s=cur.toISOString().slice(0,10);if(days[s])streak++;else break;cur.setDate(cur.getDate()-1)}let level=1,need=100,xp=totalXP;while(xp>=need){xp-=need;level++;need+=100}return{streak,level,xp,need,totalXP}}
-function updateStats(){const s=calcStats();streakText.textContent=`🔥 ${s.streak}`;levelText.textContent=`Lv ${s.level}`;xpFill.style.width=Math.min(100,(s.xp/s.need*100))+"%"}
-
-function openCreatePanel(){createPanel.style.bottom="0"}
-function closeCreatePanel(){createPanel.style.bottom="-100%"}
-function openMenu(){alert("Menu later 😄")}
-
-const daysShort=["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];let selectedIndex=0,todayIndex=0;
-function buildCalendar(){calendarTrack.innerHTML="";const today=new Date();const start=new Date();start.setDate(today.getDate()-180);for(let i=0;i<365;i++){const d=new Date(start);d.setDate(start.getDate()+i);const ds=d.toISOString().slice(0,10);const div=document.createElement("div");div.className="calendar-day";div.innerHTML=`<div>${daysShort[d.getDay()]}</div><div>${d.getDate()}</div>`;if(ds===todayStr()){div.classList.add("today");todayIndex=i}if(ds===selectedDate){div.classList.add("selected");selectedIndex=i}div.onclick=()=>selectDay(i,ds);calendarTrack.appendChild(div)}requestAnimationFrame(()=>centerOnIndex(selectedIndex,false))}
-function selectDay(i,ds){selectedDate=ds;localStorage.setItem("selectedDate",ds);document.querySelectorAll('.calendar-day').forEach(d=>d.classList.remove('selected'));document.querySelectorAll('.calendar-day')[i].classList.add('selected');selectedIndex=i;centerOnIndex(i,true);renderGoals()}
-function centerOnIndex(i,a){const it=calendarTrack.children[i];const x=it.offsetLeft+it.offsetWidth/2-calendarTrack.clientWidth/2;calendarTrack.scrollTo({left:x,behavior:a?"smooth":"auto"});calendarBubble.style.transform=`translateX(${it.offsetLeft+it.offsetWidth/2-calendarBubble.offsetWidth/2}px)`}
-
-function goToToday(){selectedDate=todayStr();localStorage.setItem("selectedDate",selectedDate);document.querySelectorAll('.calendar-day').forEach(d=>d.classList.remove('selected'));calendarTrack.children[todayIndex].classList.add('selected');selectedIndex=todayIndex;centerOnIndex(todayIndex,true);renderGoals()}
-
-function openStats(){const s=calcStats();statsContent.innerHTML=`<p>🔥 Streak: <b>${s.streak}</b></p><p>⭐ Level: <b>${s.level}</b></p><p>⚡ XP: <b>${s.totalXP}</b></p>`;statsModal.style.display="flex"}
-function openWeekly(){const map={};goals.forEach(g=>{for(const d in g.checks){map[d]=(map[d]||0)+1}});let html="";for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);html+=`<p>${ds}: ${map[ds]||0} tamamlandı</p>`}weeklyContent.innerHTML=html;weeklyModal.style.display="flex"}
-function closeModals(){statsModal.style.display="none";weeklyModal.style.display="none"}
-
-const titleBtn=document.getElementById("titleBtn");let pressTimer=null,lastTap=0;
-function pressStart(){titleBtn.classList.add("pressed");pressTimer=setTimeout(()=>{openStats();pressTimer=null},600)}
-function pressEnd(){titleBtn.classList.remove("pressed");const now=Date.now();if(pressTimer){clearTimeout(pressTimer);pressTimer=null;if(now-lastTap<300){openWeekly();lastTap=0;return}lastTap=now;setTimeout(()=>{if(Date.now()-lastTap>=300)goToToday()},310)}}
-function pressCancel(){titleBtn.classList.remove("pressed");if(pressTimer){clearTimeout(pressTimer);pressTimer=null}}
-
-titleBtn.addEventListener("touchstart",pressStart);
-titleBtn.addEventListener("mousedown",pressStart);
-titleBtn.addEventListener("touchend",pressEnd);
-titleBtn.addEventListener("mouseup",pressEnd);
-titleBtn.addEventListener("mouseleave",pressCancel);
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
+<script>
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+</script>
+<script>
+let goals = JSON.parse(localStorage.getItem("goals") || "[]");
+
+function toggleTask(task){
+  
+}
+  
+window.onload = () => {
+  buildCalendar();   // takvimi oluşturur
+  renderGoals();    // görevleri yükler
+  checkEmptyState(); // empty state + scroll kontrolü
+};
+
+function renderGoals(){
+  const container = document.getElementById("goalsContainer");
+  container.innerHTML = "";
+
+  goals.forEach(title => {
+    const div = document.createElement("div");
+    div.className = "task-card";
+    div.innerHTML = `
+      <div class="task-text">${title}</div>
+      <div class="check-btn">
+        <span class="plus-h"></span>
+        <span class="plus-v"></span>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkEmptyState(){
+  const emptyBox = document.getElementById("emptyState");
+  const container = document.getElementById("goalsContainer");
+  const calendar = document.getElementById("calendarWrapper");
+
+  if(container.children.length > 0){
+    // GÖREV VAR
+
+    emptyBox.classList.remove("show");
+    setTimeout(() => {
+      emptyBox.style.display = "none";
+    }, 200);
+
+    calendar.style.display = "block";      // takvim görünsün
+    document.body.style.overflow = "auto"; // dikey scroll açık
+  } else {
+    // GÖREV YOK
+
+    emptyBox.style.display = "flex";
+    calendar.style.display = "block";      // takvim yine görünsün
+    document.body.style.overflow = "hidden"; // dikey scroll kapalı
+
+    setTimeout(() => {
+      emptyBox.classList.add("show");
+    }, 100);
+  }
+}
+
+function openCreatePanel(){
+  document.getElementById("createPanel").style.bottom = "0";
+  document.body.style.overflow = "hidden";
+}
+
+function closeCreatePanel(){
+  document.getElementById("createPanel").style.bottom = "-100%";
+  document.body.style.overflow = "auto";
+}
+
+function addGoal(){
+  const input = document.getElementById("goalInput");
+  const title = input.value.trim();
+  if(!title) return;
+
+  goals.unshift(title); // en üste ekle
+
+  localStorage.setItem("goals", JSON.stringify(goals));
+
+  renderGoals();
+  checkEmptyState();
+
+  input.value = "";
+  closeCreatePanel();
+}
+
+function openMenu(){
+  alert("Menu panel later 😄");
+}
+
+const daysShort = ["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];
+let selectedIndex = 0;
+let todayIndex = 0;
+
+function buildCalendar(){
+const track = document.getElementById("calendarTrack");
+track.innerHTML = "";
+
+const today = new Date();
+const start = new Date();
+start.setDate(today.getDate() - 180);
+
+for(let i=0;i<365;i++){
+const d = new Date(start);
+d.setDate(start.getDate()+i);
+
+const div = document.createElement("div");
+div.className = "calendar-day";
+div.innerHTML = `
+<div class="day">${daysShort[d.getDay()]}</div>
+<div class="date">${d.getDate()}</div>
+`;
+
+if(d.toDateString() === today.toDateString()){
+div.classList.add("today","selected");
+selectedIndex = i;
+todayIndex = i;
+}
+
+div.onclick = ()=>selectDay(i);
+
+track.appendChild(div);
+}
+
+requestAnimationFrame(()=>{
+centerOnIndex(selectedIndex,false);
+});
+}
+
+function selectDay(index){
+const days = document.querySelectorAll(".calendar-day");
+
+days.forEach(d=>{
+d.classList.remove("selected");
+if(d.classList.contains("today")) d.style.color="#c9b7e2";
+});
+
+days[index].classList.add("selected");
+
+if(index !== todayIndex){
+days[todayIndex].style.color="#c9b7e2";
+}
+
+centerOnIndex(index,true);
+selectedIndex = index;
+}
+
+function centerOnIndex(index,animate){
+const track = document.getElementById("calendarTrack");
+const item = track.children[index];
+const bubble = document.getElementById("calendarBubble");
+
+const x = item.offsetLeft + item.offsetWidth/2 - track.clientWidth/2;
+track.scrollTo({left:x, behavior: animate?"smooth":"auto"});
+
+bubble.style.transform = `translateX(${item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2}px)`;
+}
+
+</script>
+<div id="createPanel" style="
+position:fixed;
+left:0;
+right:0;
+bottom:-100%;
+height:85%;
+background:#111;
+border-top-left-radius:20px;
+border-top-right-radius:20px;
+transition:0.3s;
+z-index:2000;
+padding:16px;
+">
+
+<div class="panel-inner">
+
+  <div class="panel-handle"></div>
+
+  <h3>Yeni Hedef</h3>
+
+  <input id="goalInput" placeholder="Hedef adı">
+
+  <button class="primary-btn" onclick="addGoal()">Kaydet</button>
+  <button class="cancel-btn" onclick="closeCreatePanel()">İptal</button>
+
+</div>
+
+</div>
 
 </body>
 </html>
