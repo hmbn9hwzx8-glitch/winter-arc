@@ -320,10 +320,10 @@ h1,h2{margin-top:0}
 }
 
 #calendarWrapper{
-position:relative;
-margin-top:0;
-padding:8px 0 14px;
-overflow:hidden;
+  position:relative;
+  margin-top:0;
+  padding:8px 0 14px;
+  overflow:visible;   /* ✅ KRİTİK */
 }
 
 #calendarTrack{
@@ -360,6 +360,11 @@ color:#c9b7e2;
 
 .calendar-day.selected{
 color:#fff;
+}
+
+.calendar-day{
+  position: relative;
+  z-index: 2;
 }
 
 #calendarBubble{
@@ -652,6 +657,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
