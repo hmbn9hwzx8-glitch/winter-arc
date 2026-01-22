@@ -327,13 +327,14 @@ overflow:hidden;
 }
 
 #calendarTrack{
-display:flex;
-gap:22px;
-padding:0 16px;
-overflow-x:auto;
-scroll-snap-type:x mandatory;
--webkit-overflow-scrolling:touch;
+  display:flex;
+  gap:22px;
+  padding:0;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
 }
+
 
 .calendar-day{
 min-width:48px;
@@ -362,18 +363,25 @@ color:#fff;
 }
 
 #calendarBubble{
-position:absolute;
-top:0;
-left:0;
-transform:translateX(0);
-width:64px;
-height:72px;
-border-radius:32px;
-background:#c9b7e2;
-pointer-events:none;
-transition:transform .35s cubic-bezier(.25,.8,.25,1);
-z-index:-1;
+  position:absolute;
+  top:0;
+  left:0;
+  transform:translateX(0);
+  width:64px;
+  height:72px;
+  border-radius:32px;
+  background:#c9b7e2;
+  pointer-events:none;
+  transition:transform .35s cubic-bezier(.25,.8,.25,1);
+  z-index:-1;
 }
+
+
+.calendar-spacer{
+  flex: 0 0 50vw;   /* ekranın yarısı kadar boşluk */
+  height: 1px;     /* görünmez */
+}
+
 </style>
 </head>
 <body>
@@ -395,9 +403,21 @@ z-index:-1;
 </div>
 
 <div id="calendarWrapper">
-  <div id="calendarTrack"></div>
+  <div id="calendarTrack">
+
+    <!-- sol spacer -->
+    <div class="calendar-spacer"></div>
+
+    <!-- günler JS ile buraya eklenecek -->
+
+    <!-- sağ spacer -->
+    <div class="calendar-spacer"></div>
+
+  </div>
+
   <div id="calendarBubble"></div>
 </div>
+
   
   <div id="emptyState" class="empty-state">
   <div class="empty-icon">📁</div>
@@ -515,10 +535,6 @@ const daysShort = ["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];
 let selectedIndex = 0;
 let todayIndex = 0;
 
-function buildCalendar(){
-const track = document.getElementById("calendarTrack");
-track.innerHTML = "";
-
 const today = new Date();
 const start = new Date();
 start.setDate(today.getDate() - 180);
@@ -550,45 +566,95 @@ centerOnIndex(selectedIndex,false);
 });
 }
 
-function selectDay(index){
-const days = document.querySelectorAll(".calendar-day");
+let calendarDays = [];
+let selectedIndex = 0;
+let todayIndex = 0;
 
-days.forEach(d=>{
-d.classList.remove("selected");
-if(d.classList.contains("today")) d.style.color="#c9b7e2";
+function buildCalendar(){
+  const track = document.getElementById("calendarTrack");
+
+  // spacer'ları koru, arayı temizle
+  const spacers = track.querySelectorAll(".calendar-spacer");
+  track.innerHTML = "";
+  track.appendChild(spacers[0]);
+
+  calendarDays = [];
+
+  const today = new Date();
+  const start = new Date();
+  start.setDate(today.getDate() - 180);
+
+  for(let i=0;i<365;i++){
+    const d = new Date(start);
+    d.setDate(start.getDate()+i);
+
+    const div = document.createElement("div");
+    div.className = "calendar-day";
+    div.innerHTML = `
+      <div class="day">${daysShort[d.getDay()]}</div>
+      <div class="date">${d.getDate()}</div>
+    `;
+
+    const isToday = d.toDateString() === today.toDateString();
+    if(isToday){
+      todayIndex = calendarDays.length;
+      selectedIndex = todayIndex;
+      div.classList.add("today","selected");
+    }
+
+    const realIndex = calendarDays.length;
+    div.addEventListener("click", ()=> selectDay(realIndex));
+
+    calendarDays.push(div);
+    track.appendChild(div);
+  }
+
+  track.appendChild(spacers[1]);
+
+  requestAnimationFrame(()=>{
+    centerOnIndex(selectedIndex, false);
+    updateBubble();
+  });
+}
+
+function selectDay(index){
+  calendarDays.forEach(d=>d.classList.remove("selected"));
+
+  calendarDays[index].classList.add("selected");
+  selectedIndex = index;
+
+  centerOnIndex(index, true);
+  updateBubble();
+}
+
+function centerOnIndex(index, animate){
+  const track = document.getElementById("calendarTrack");
+  const item = calendarDays[index];
+
+  const x = item.offsetLeft + item.offsetWidth/2 - track.clientWidth/2;
+
+  track.scrollTo({
+    left: x,
+    behavior: animate ? "smooth" : "auto"
+  });
+}
+
+function updateBubble(){
+  const bubble = document.getElementById("calendarBubble");
+  const item = calendarDays[selectedIndex];
+
+  const x = item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2;
+  bubble.style.transform = `translateX(${x}px)`;
+}
+
+document.getElementById("calendarTrack").addEventListener("scroll", ()=>{
+  updateBubble();
 });
 
-days[index].classList.add("selected");
-
-if(index !== todayIndex){
-days[todayIndex].style.color="#c9b7e2";
-}
-
-centerOnIndex(index,true);
-selectedIndex = index;
-}
-
-function centerOnIndex(index,animate){
-const track = document.getElementById("calendarTrack");
-const item = track.children[index];
-const bubble = document.getElementById("calendarBubble");
-
-const x = item.offsetLeft + item.offsetWidth/2 - track.clientWidth/2;
-track.scrollTo({left:x, behavior: animate?"smooth":"auto"});
-
-bubble.style.transform = `translateX(${item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2}px)`;
-}
 
 function goToToday(){
-  const days = document.querySelectorAll(".calendar-day");
-
-  // bütün seçili günleri temizle
-  days.forEach(d => d.classList.remove("selected"));
-
-  // bugünün indexini tekrar seç
-  if(days[todayIndex]){
-    days[todayIndex].classList.add("selected");
-  }
+  selectDay(todayIndex);
+}
 
   selectedIndex = todayIndex;
 
@@ -630,6 +696,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
