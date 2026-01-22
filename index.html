@@ -532,38 +532,7 @@ function openMenu(){
 }
 
 const daysShort = ["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];
-let selectedIndex = 0;
-let todayIndex = 0;
 
-const today = new Date();
-const start = new Date();
-start.setDate(today.getDate() - 180);
-
-for(let i=0;i<365;i++){
-const d = new Date(start);
-d.setDate(start.getDate()+i);
-
-const div = document.createElement("div");
-div.className = "calendar-day";
-div.innerHTML = `
-<div class="day">${daysShort[d.getDay()]}</div>
-<div class="date">${d.getDate()}</div>
-`;
-
-if(d.toDateString() === today.toDateString()){
-div.classList.add("today","selected");
-selectedIndex = i;
-todayIndex = i;
-}
-
-div.onclick = ()=>selectDay(i);
-
-track.appendChild(div);
-}
-
-requestAnimationFrame(()=>{
-centerOnIndex(selectedIndex,false);
-});
 }
 
 let calendarDays = [];
@@ -573,7 +542,6 @@ let todayIndex = 0;
 function buildCalendar(){
   const track = document.getElementById("calendarTrack");
 
-  // spacer'ları koru, arayı temizle
   const spacers = track.querySelectorAll(".calendar-spacer");
   track.innerHTML = "";
   track.appendChild(spacers[0]);
@@ -595,15 +563,14 @@ function buildCalendar(){
       <div class="date">${d.getDate()}</div>
     `;
 
-    const isToday = d.toDateString() === today.toDateString();
-    if(isToday){
+    if(d.toDateString() === today.toDateString()){
       todayIndex = calendarDays.length;
       selectedIndex = todayIndex;
       div.classList.add("today","selected");
     }
 
-    const realIndex = calendarDays.length;
-    div.addEventListener("click", ()=> selectDay(realIndex));
+    const idx = calendarDays.length;
+    div.addEventListener("click", ()=>selectDay(idx));
 
     calendarDays.push(div);
     track.appendChild(div);
@@ -612,18 +579,16 @@ function buildCalendar(){
   track.appendChild(spacers[1]);
 
   requestAnimationFrame(()=>{
-    centerOnIndex(selectedIndex, false);
+    centerOnIndex(selectedIndex,false);
     updateBubble();
   });
 }
 
 function selectDay(index){
   calendarDays.forEach(d=>d.classList.remove("selected"));
-
   calendarDays[index].classList.add("selected");
   selectedIndex = index;
-
-  centerOnIndex(index, true);
+  centerOnIndex(index,true);
   updateBubble();
 }
 
@@ -634,10 +599,25 @@ function centerOnIndex(index, animate){
   const x = item.offsetLeft + item.offsetWidth/2 - track.clientWidth/2;
 
   track.scrollTo({
-    left: x,
-    behavior: animate ? "smooth" : "auto"
+    left:x,
+    behavior: animate?"smooth":"auto"
   });
 }
+
+function updateBubble(){
+  const bubble = document.getElementById("calendarBubble");
+  const item = calendarDays[selectedIndex];
+  const x = item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2;
+  bubble.style.transform = `translateX(${x}px)`;
+}
+
+document.getElementById("calendarTrack").addEventListener("scroll", updateBubble);
+
+function goToToday(){
+  selectDay(todayIndex);
+}
+
+document.getElementById("titleBtn").addEventListener("click", goToToday);
 
 function updateBubble(){
   const bubble = document.getElementById("calendarBubble");
@@ -696,6 +676,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
