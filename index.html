@@ -605,7 +605,6 @@ function centerOnIndex(index, animate){
 function updateBubble(){
   const bubble = document.getElementById("calendarBubble");
   const item = calendarDays[selectedIndex];
-
   if(!item) return;
 
   const x = item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2;
@@ -620,30 +619,6 @@ function goToToday(){
 
 document.getElementById("titleBtn").addEventListener("click", goToToday);
 
-function updateBubble(){
-  const bubble = document.getElementById("calendarBubble");
-  const item = calendarDays[selectedIndex];
-
-  const x = item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2;
-  bubble.style.transform = `translateX(${x}px)`;
-}
-
-document.getElementById("calendarTrack").addEventListener("scroll", ()=>{
-  updateBubble();
-});
-
-
-function goToToday(){
-  selectDay(todayIndex);
-}
-
-  selectedIndex = todayIndex;
-
-  // takvimi bugüne ortala
-  centerOnIndex(todayIndex, true);
-}
-
-document.getElementById("titleBtn").addEventListener("click", goToToday);
 
 </script>
 <div id="createPanel" style="
@@ -677,6 +652,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
