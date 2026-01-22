@@ -533,8 +533,6 @@ function openMenu(){
 
 const daysShort = ["Paz","Pzt","Sal","Çar","Per","Cum","Cts"];
 
-}
-
 let calendarDays = [];
 let selectedIndex = 0;
 let todayIndex = 0;
@@ -600,13 +598,16 @@ function centerOnIndex(index, animate){
 
   track.scrollTo({
     left:x,
-    behavior: animate?"smooth":"auto"
+    behavior: animate ? "smooth" : "auto"
   });
 }
 
 function updateBubble(){
   const bubble = document.getElementById("calendarBubble");
   const item = calendarDays[selectedIndex];
+
+  if(!item) return;
+
   const x = item.offsetLeft + item.offsetWidth/2 - bubble.offsetWidth/2;
   bubble.style.transform = `translateX(${x}px)`;
 }
@@ -676,6 +677,7 @@ padding:16px;
 
 </body>
 </html>
+
 
 
 
