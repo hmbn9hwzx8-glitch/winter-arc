@@ -237,7 +237,7 @@ h1,h2{margin-top:0}
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  pointer-events:none;
+  pointer-events:auto;
 }
 
 .top-btn{
@@ -329,7 +329,7 @@ overflow:hidden;
 #calendarTrack{
 display:flex;
 gap:22px;
-padding:0 50vw;
+padding:0 16px;
 overflow-x:auto;
 scroll-snap-type:x mandatory;
 -webkit-overflow-scrolling:touch;
@@ -364,8 +364,8 @@ color:#fff;
 #calendarBubble{
 position:absolute;
 top:0;
-left:50%;
-transform:translateX(-50%);
+left:0;
+transform:translateX(0);
 width:64px;
 height:72px;
 border-radius:32px;
@@ -630,4 +630,5 @@ padding:16px;
 
 </body>
 </html>
+
 
